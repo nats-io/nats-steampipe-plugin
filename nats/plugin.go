@@ -16,7 +16,8 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			Schema:      configSchema,
 		},
 		TableMap: map[string]*plugin.Table{
-			"jetstream_streams": jetstreamStreams(),
+			"stream_configs":   streamConfigs(),
+			"consumer_configs": consumerConfigs(),
 		},
 	}
 	return p
