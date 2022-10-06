@@ -1,4 +1,4 @@
-module github.com/hooksie1/natspipe
+module github.com/ConnectEverything/steampipe-plugin-nats
 
 go 1.18
 

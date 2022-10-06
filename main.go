@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/hooksie1/natspipe/nats"
+	"github.com/ConnectEverything/steampipe-plugin-nats/nats"
 	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
 )
 
