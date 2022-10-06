@@ -55,7 +55,7 @@ func consumerConfigs() *plugin.Table {
 	}
 }
 
-type Consumer struct {
+type ConsumerConfig struct {
 	Stream string `json:"stream"`
 	Config *api.ConsumerConfig
 }
@@ -89,7 +89,7 @@ func listConsumerConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 
 		for _, v := range consumers {
 			cfg := v.Configuration()
-			c := Consumer{
+			c := ConsumerConfig{
 				Stream: s,
 				Config: &cfg,
 			}
@@ -125,7 +125,7 @@ func getConsumerConfig(ctx context.Context, d *plugin.QueryData, h *plugin.Hydra
 
 	cfg := consumer.Configuration()
 
-	c := Consumer{
+	c := ConsumerConfig{
 		Stream: stream,
 		Config: &cfg,
 	}
