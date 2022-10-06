@@ -66,7 +66,6 @@ func listStreamConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 
 	err = manager.EachStream(func(s *jsm.Stream) {
 		d.StreamListItem(ctx, s.Configuration())
-
 	})
 
 	if err != nil {

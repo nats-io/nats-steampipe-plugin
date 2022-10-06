@@ -18,6 +18,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		TableMap: map[string]*plugin.Table{
 			"stream_configs":   streamConfigs(),
 			"consumer_configs": consumerConfigs(),
+			"stream_info":      streamInfo(),
 		},
 	}
 	return p
