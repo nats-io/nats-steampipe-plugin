@@ -33,6 +33,7 @@ func streamInfo() *plugin.Table {
 			{Name: "num_subjects", Type: proto.ColumnType_INT, Description: "The number of stream subjects", Transform: transform.FromField("State.NumSubjects")},
 			{Name: "subjects", Type: proto.ColumnType_JSON, Description: "The stream subjects", Transform: transform.FromField("State.Subjects")},
 			{Name: "consumers", Type: proto.ColumnType_INT, Description: "The number of consumers", Transform: transform.FromField("State.Consumers")},
+			{Name: "cluster", Type: proto.ColumnType_STRING, Description: "Cluster name", Transform: transform.FromField("Cluster.Name")},
 		},
 	}
 }

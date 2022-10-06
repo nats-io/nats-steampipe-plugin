@@ -37,6 +37,7 @@ func consumerConfigs() *plugin.Table {
 			{Name: "heart_beat", Type: proto.ColumnType_INT, Description: "The consumer hearbeat duration", Transform: transform.FromField("Config.Heartbeat")},
 			{Name: "max_ack_pending", Type: proto.ColumnType_INT, Description: "The consumer max ack pending", Transform: transform.FromField("Config.MaxAckPending")},
 			{Name: "max_deliver", Type: proto.ColumnType_INT, Description: "The consumer max deliver", Transform: transform.FromField("Config.MaxDeliver")},
+			{Name: "backoff", Type: proto.ColumnType_TIMESTAMP, Description: "The backoff times", Transform: transform.FromField("Config.Backoff")},
 			{Name: "max_waiting", Type: proto.ColumnType_INT, Description: "The consumer max waiting", Transform: transform.FromField("Config.MaxWaiting")},
 			{Name: "opt_start_seq", Type: proto.ColumnType_INT, Description: "The consumer start seq", Transform: transform.FromField("Config.OptStartSeq")},
 			{Name: "opt_start_time", Type: proto.ColumnType_TIMESTAMP, Description: "The consumer opt start time", Transform: transform.FromField("Config.OptStartTime")},
