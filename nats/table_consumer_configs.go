@@ -62,8 +62,12 @@ type ConsumerConfig struct {
 }
 
 func listConsumerConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	urls := d.KeyColumnQualString("urls")
-	nc, err := nats.Connect(urls)
+	config, err := GetConfig(d.Connection)
+	if err != nil {
+		return nil, err
+	}
+
+	nc, err := nats.Connect(config.URLs)
 	if err != nil {
 		return nil, err
 	}
@@ -105,8 +109,12 @@ func listConsumerConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 }
 
 func getConsumerConfig(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	urls := d.KeyColumnQualString("urls")
-	nc, err := nats.Connect(urls)
+	config, err := GetConfig(d.Connection)
+	if err != nil {
+		return nil, err
+	}
+
+	nc, err := nats.Connect(config.URLs)
 	if err != nil {
 		return nil, err
 	}

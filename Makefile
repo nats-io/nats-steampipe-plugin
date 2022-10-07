@@ -1,4 +1,4 @@
-PROJECT_NAME := "nats-steampipe-plugin"
+PROJECT_NAME := "steampipe-plugin-nats"
 
 dep:
 	go mod tidy

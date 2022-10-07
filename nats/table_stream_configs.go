@@ -53,8 +53,12 @@ func streamConfigs() *plugin.Table {
 }
 
 func listStreamConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
-	urls := d.KeyColumnQualString("urls")
-	nc, err := nats.Connect(urls)
+	config, err := GetConfig(d.Connection)
+	if err != nil {
+		return nil, err
+	}
+
+	nc, err := nats.Connect(config.URLs)
 	if err != nil {
 		return nil, err
 	}
@@ -77,8 +81,12 @@ func listStreamConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 }
 
 func getStreamConfig(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
-	urls := d.KeyColumnQualString("urls")
-	nc, err := nats.Connect(urls)
+	config, err := GetConfig(d.Connection)
+	if err != nil {
+		return nil, err
+	}
+
+	nc, err := nats.Connect(config.URLs)
 	if err != nil {
 		return nil, err
 	}

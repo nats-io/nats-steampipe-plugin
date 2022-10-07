@@ -20,6 +20,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"consumer_configs": consumerConfigs(),
 			"stream_info":      streamInfo(),
 			"consumer_info":    consumerInfo(),
+			"varz_info":        varzInfo(),
 		},
 	}
 	return p

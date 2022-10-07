@@ -1,9 +1,15 @@
 package nats
 
-import "github.com/turbot/steampipe-plugin-sdk/v4/plugin/schema"
+import (
+	"fmt"
+
+	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/schema"
+)
 
 type natsConfig struct {
-	URLs string `cty:"urls"`
+	URLs           string  `cty:"urls"`
+	MonitoringURLs *string `cty:"monitoring_urls"`
 }
 
 func connConfig() interface{} {
@@ -15,4 +21,16 @@ var configSchema = map[string]*schema.Attribute{
 		Type:     schema.TypeString,
 		Required: true,
 	},
+	"monitoring_urls": {
+		Type: schema.TypeString,
+	},
+}
+
+func GetConfig(conn *plugin.Connection) (natsConfig, error) {
+	config, ok := conn.Config.(natsConfig)
+	if !ok {
+		return natsConfig{}, fmt.Errorf("really bad")
+	}
+
+	return config, nil
 }
