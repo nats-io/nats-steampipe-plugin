@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/nats-io/jsm.go"
-	"github.com/nats-io/nats.go"
 	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
@@ -44,10 +43,11 @@ func listStreamInfos(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrate
 		return nil, err
 	}
 
-	nc, err := nats.Connect(config.URLs)
+	nc, err := config.Connect()
 	if err != nil {
 		return nil, err
 	}
+
 	manager, err := jsm.New(nc)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,7 @@ func getStreamInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateDa
 		return nil, err
 	}
 
-	nc, err := nats.Connect(config.URLs)
+	nc, err := config.Connect()
 	if err != nil {
 		return nil, err
 	}

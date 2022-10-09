@@ -5,7 +5,6 @@ import (
 
 	"github.com/nats-io/jsm.go"
 	"github.com/nats-io/jsm.go/api"
-	"github.com/nats-io/nats.go"
 	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
 	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
 	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
@@ -67,7 +66,7 @@ func listConsumerConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 		return nil, err
 	}
 
-	nc, err := nats.Connect(config.URLs)
+	nc, err := config.Connect()
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +113,7 @@ func getConsumerConfig(ctx context.Context, d *plugin.QueryData, h *plugin.Hydra
 		return nil, err
 	}
 
-	nc, err := nats.Connect(config.URLs)
+	nc, err := config.Connect()
 	if err != nil {
 		return nil, err
 	}
