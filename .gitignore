@@ -1,1 +1,3 @@
-nats-steampipe-plugin.plugin
+/dist/
+/nats-steampipe-plugin.plugin
+/steampipe-plugin-nats.spc.dev

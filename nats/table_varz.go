@@ -1,11 +1,9 @@
 package nats
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 
@@ -93,7 +91,7 @@ func listVarzInfos(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDa
 		Timeout: 10 * time.Second,
 	}
 
-	url := fmt.Sprintf("%s/varz", *config.MonitoringURLs)
+	url := fmt.Sprintf("%s/varz", String(config.MonitoringURL))
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -105,20 +103,15 @@ func listVarzInfos(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDa
 		return nil, err
 	}
 
-	var buf bytes.Buffer
-	io.Copy(&buf, resp.Body)
-	data := buf.Bytes()
-
 	var varz server.Varz
-
-	if err := json.Unmarshal(data, &varz); err != nil {
+	err = json.NewDecoder(resp.Body).Decode(&varz)
+	if err != nil {
 		return nil, err
 	}
 
-	d.StreamListItem(ctx, varz)
+	d.StreamListItem(ctx, &varz)
 
 	return nil, nil
-
 }
 
 func getVarzInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) (interface{}, error) {
@@ -131,7 +124,7 @@ func getVarzInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData
 		Timeout: 10 * time.Second,
 	}
 
-	url := fmt.Sprintf("%s/varz", *config.MonitoringURLs)
+	url := fmt.Sprintf("%s/varz", String(config.MonitoringURL))
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -143,13 +136,9 @@ func getVarzInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData
 		return nil, err
 	}
 
-	var buf bytes.Buffer
-	io.Copy(&buf, resp.Body)
-	data := buf.Bytes()
-
 	var varz server.Varz
-
-	if err := json.Unmarshal(data, &varz); err != nil {
+	err = json.NewDecoder(resp.Body).Decode(&varz)
+	if err != nil {
 		return nil, err
 	}
 
