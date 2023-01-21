@@ -3,6 +3,7 @@ module github.com/ConnectEverything/steampipe-plugin-nats
 go 1.18
 
 require (
+	github.com/dustin/go-humanize v1.0.0
 	github.com/nats-io/jsm.go v0.0.34
 	github.com/nats-io/nats-server/v2 v2.9.0
 	github.com/nats-io/nats.go v1.17.0
@@ -22,7 +23,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/dgraph-io/ristretto v0.1.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/eko/gocache/v3 v3.1.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/gertd/go-pluralize v0.2.1 // indirect

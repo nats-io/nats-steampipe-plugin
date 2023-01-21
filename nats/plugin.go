@@ -21,6 +21,7 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 			"stream_info":      streamInfo(),
 			"consumer_info":    consumerInfo(),
 			"varz_info":        varzInfo(),
+			"kv_info":          kvInfo(),
 		},
 	}
 	return p
