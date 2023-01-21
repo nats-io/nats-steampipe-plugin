@@ -3,6 +3,7 @@ package nats
 import (
 	"context"
 	"fmt"
+	"math"
 	"strings"
 	"time"
 
@@ -30,7 +31,10 @@ func kvInfo() *plugin.Table {
 			{Name: "created", Type: proto.ColumnType_STRING, Transform: transform.FromField("Created")},
 			{Name: "size", Type: proto.ColumnType_STRING, Transform: transform.FromField("Size")},
 			{Name: "values", Type: proto.ColumnType_INT, Transform: transform.FromField("Values")},
-			{Name: "last_updated", Type: proto.ColumnType_STRING, Transform: transform.FromField("LastUpdated")},
+
+			{Name: "last_updated_human", Type: proto.ColumnType_STRING, Transform: transform.FromField("LastUpdatedHuman")},
+
+			{Name: "last_updated_seconds", Type: proto.ColumnType_INT, Transform: transform.FromField("LastUpdatedSeconds")},
 		},
 	}
 }
@@ -41,7 +45,34 @@ type KV struct {
 	Created     string `json:"created"`
 	Size        string `json:"size"`
 	Values      int64  `json:"values"`
-	LastUpdated string `json:"last_updated"`
+	// human readable for last updated
+	LastUpdatedHuman string `json:"last_updated_human"`
+	// machine readable number of seconds since last update
+	LastUpdatedSeconds int64 `json:"last_updated_seconds"`
+}
+
+func formatUpdatedTime(t time.Time) string {
+	diff := time.Since(t)
+
+	if diff == math.MaxInt64 {
+		return "never"
+	}
+
+	seconds := diff / time.Second
+	minutes := seconds / 60
+	hours := minutes / 60
+
+	return fmt.Sprintf("%dh%dm%ds", hours%24, minutes%60, seconds%60)
+}
+
+func formatUnix(t time.Time) int64 {
+	diff := time.Since(t)
+
+	if diff == math.MaxInt64 {
+		return 0
+	}
+
+	return int64(diff.Seconds())
 }
 
 func listKVInfos(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (interface{}, error) {
@@ -78,12 +109,13 @@ func listKVInfos(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		}
 
 		d.StreamListItem(ctx, KV{
-			Bucket:      strings.TrimPrefix(k.Name(), "KV_"),
-			Description: k.Description(),
-			Created:     info.Created.Format("2006-01-02 15:04:05"),
-			Size:        humanize.IBytes(info.State.Bytes),
-			Values:      int64(info.State.Msgs),
-			LastUpdated: time.Since(info.State.LastTime).String(),
+			Bucket:             strings.TrimPrefix(k.Name(), "KV_"),
+			Description:        k.Description(),
+			Created:            info.Created.Format("2006-01-02 15:04:05"),
+			Size:               humanize.IBytes(info.State.Bytes),
+			Values:             int64(info.State.Msgs),
+			LastUpdatedHuman:   formatUpdatedTime(info.State.LastTime),
+			LastUpdatedSeconds: formatUnix(info.State.LastTime),
 		})
 
 	}
@@ -109,7 +141,11 @@ func getKVInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 
 	name := d.KeyColumnQuals["bucket"].GetStringValue()
 
-	str, err := manager.LoadStream(fmt.Sprintf("KV_%s", name))
+	if !strings.HasPrefix("KV_", name) {
+		name = fmt.Sprintf("KV_%s", name)
+	}
+
+	str, err := manager.LoadStream(name)
 	if err != nil {
 		return nil, err
 	}
@@ -120,12 +156,13 @@ func getKVInfo(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData) 
 	}
 
 	return KV{
-		Bucket:      strings.TrimPrefix(str.Name(), "KV_"),
-		Description: str.Description(),
-		Created:     info.Created.Format("2006-01-02 15:04:05"),
-		Size:        humanize.IBytes(info.State.Bytes),
-		Values:      int64(info.State.Msgs),
-		LastUpdated: time.Since(info.State.LastTime).String(),
+		Bucket:             strings.TrimPrefix(str.Name(), "KV_"),
+		Description:        str.Description(),
+		Created:            info.Created.Format("2006-01-02 15:04:05"),
+		Size:               humanize.IBytes(info.State.Bytes),
+		Values:             int64(info.State.Msgs),
+		LastUpdatedHuman:   formatUpdatedTime(info.State.LastTime),
+		LastUpdatedSeconds: formatUnix(info.State.LastTime),
 	}, nil
 
 }
