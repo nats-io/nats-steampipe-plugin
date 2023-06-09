@@ -5,8 +5,8 @@ import (
 
 	"github.com/nats-io/jsm.go/natscontext"
 	"github.com/nats-io/nats.go"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/schema"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/schema"
 )
 
 func String(s *string) string {

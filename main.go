@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/ConnectEverything/steampipe-plugin-nats/nats"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
 )
 
 func main() {

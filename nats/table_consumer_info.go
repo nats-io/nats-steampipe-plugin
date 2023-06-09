@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/nats-io/jsm.go"
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func consumerInfo() *plugin.Table {
@@ -57,7 +57,7 @@ func listConsumerInfos(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 
 	var streams []string
 
-	err = manager.EachStream(func(s *jsm.Stream) {
+	err = manager.EachStream(nil, func(s *jsm.Stream) {
 		streams = append(streams, s.Configuration().Name)
 	})
 	if err != nil {
@@ -100,7 +100,9 @@ func getConsumerInfo(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrate
 		return nil, err
 	}
 
-	name := d.KeyColumnQuals["name"].GetStringValue()
+	nameQuals := d.EqualsQuals
+	//name := d.KeyColumnQuals["name"].GetStringValue()
+	name := nameQuals["name"].GetStringValue()
 
 	stream, err := manager.LoadStream(name)
 	if err != nil {
