@@ -5,9 +5,9 @@ import (
 
 	"github.com/nats-io/jsm.go"
 	"github.com/nats-io/jsm.go/api"
-	"github.com/turbot/steampipe-plugin-sdk/v4/grpc/proto"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v4/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v5/grpc/proto"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
 func consumerConfigs() *plugin.Table {
@@ -78,7 +78,7 @@ func listConsumerConfigs(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 
 	var streams []string
 
-	err = manager.EachStream(func(s *jsm.Stream) {
+	err = manager.EachStream(nil, func(s *jsm.Stream) {
 		streams = append(streams, s.Configuration().Name)
 	})
 	if err != nil {
@@ -123,8 +123,12 @@ func getConsumerConfig(ctx context.Context, d *plugin.QueryData, h *plugin.Hydra
 		return nil, err
 	}
 
-	stream := d.KeyColumnQuals["stream"].GetStringValue()
-	name := d.KeyColumnQuals["name"].GetStringValue()
+	//stream := d.KeyColumnQuals["stream"].GetStringValue()
+	streamQuals := d.EqualsQuals
+
+	stream := streamQuals["id"].GetStringValue()
+
+	name := streamQuals["name"].GetStringValue()
 
 	consumer, err := manager.LoadConsumer(stream, name)
 	if err != nil {
