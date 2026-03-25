@@ -1,3 +1,7 @@
+> [!WARNING]
+> **This repository has been archived and is no longer maintained.**
+> No further updates, bug fixes, or pull requests will be accepted.
+
 # NATS Steampipe Plugin
 
 A plugin for [Steampipe](https://steampipe.io) for querying information about various NATS assets.
